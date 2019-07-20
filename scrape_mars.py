@@ -8,13 +8,7 @@ import requests
 def init_browser(): 
     # Replace the path with your actual path to the chromedriver
 
-    #Mac Users
-    #executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
-    #return Browser('chrome', **executable_path, headless=False)
-
-    #Windows Users
-    # executable_path = {'executable_path': '/Users/cantu/Desktop/Mission-to-Mars'}
-    # return Browser('chrome', **executable_path, headless=False)
+    #Mac/Linux Users
     exec_path = {'executable_path': '/usr/local/bin/chromedriver'}
     return Browser('chrome', headless=False, **exec_path)
 
@@ -102,23 +96,23 @@ def scrape_mars_image():
 def scrape_mars_weather():
 
     try: 
-
         # Initialize browser 
-        #browser = init_browser()
+        browser = init_browser()
 
-        #browser.is_element_present_by_css("div", wait_time=1)
+        browser.is_element_present_by_css("div", wait_time=1)
 
         # Visit Mars Weather Twitter through splinter module
-        #weather_url = 'https://twitter.com/marswxreport?lang=en'
-        #browser.visit(weather_url)
+        weather_url = 'https://twitter.com/marswxreport?lang=en'
+        browser.visit(weather_url)
 
         # HTML Object 
-        #html_weather = browser.html
+        html_weather = browser.html
 
         # Parse HTML with Beautiful Soup
-        #soup = BeautifulSoup(html_weather, 'html.parser')
+        tweet_soup = BeautifulSoup(html_weather, 'html.parser')
 
         # Find all elements that contain tweets
+        first_tweet = tweet_soup.find('p', class_='TweetTextSize').text
         #latest_tweets = soup.find_all('div', class_='js-tweet-text-container')
 
         # Retrieve all elements that contain news title in the specified range
@@ -133,8 +127,9 @@ def scrape_mars_weather():
 
         # Dictionary entry from WEATHER TWEET
         #mars_info['weather_tweet'] = weather_tweet
+        mars_info['weather_tweet'] = first_tweet
         
-        #return mars_info
+        return mars_info
 
     finally:
 
